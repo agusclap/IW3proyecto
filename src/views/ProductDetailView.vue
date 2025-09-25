@@ -14,7 +14,7 @@
             Precio: <strong>${{ product.precio.toLocaleString('es-AR') }}</strong>
           </p>
           <p class="text-body-2 text-medium-emphasis">
-            Este producto forma parte del catálogo demostrativo del práctico unificado.
+            Este producto forma parte del catálogo.
           </p>
         </v-card-text>
         <v-card-actions class="justify-space-between">
@@ -44,10 +44,8 @@ const route = useRoute()
 const router = useRouter()
 const { add } = useCart()
 
-const product = computed(() => {
-  const id = Number(route.params.id)
-  return products.find((p) => p.id === id) || null
-})
+const product = computed(() => products.value.find(p => p.id === Number(route.params.id)))
+
 
 function goBack() {
   router.push({ name: 'products' })

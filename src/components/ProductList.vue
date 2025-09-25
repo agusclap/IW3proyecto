@@ -18,8 +18,7 @@
         v-for="item in filtered"
         :key="item.id"
         class="rounded-lg"
-        :class="item.stock === 0 ? 'bg-red-lighten-5' : 'bg-surface'
-        "
+        :class="item.stock === 0 ? 'bg-red-lighten-5' : 'bg-surface'"
       >
         <template #prepend>
           <v-avatar color="primary" class="text-white">
@@ -28,6 +27,7 @@
         </template>
 
         <v-list-item-title class="text-h6">{{ item.nombre }}</v-list-item-title>
+
         <v-list-item-subtitle>
           <div class="d-flex align-center flex-wrap gap-2">
             <strong>${{ item.precio.toLocaleString('es-AR') }}</strong>
@@ -65,15 +65,18 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { products } from '../data/products'
+import { products } from '@/data/products'   // usa el alias @ si lo tenés
 
 const emit = defineEmits(['add-to-cart'])
 
 const q = ref('')
+
+
 const filtered = computed(() => {
   const term = q.value.trim().toLowerCase()
-  if (!term) return products
-  return products.filter((p) => p.nombre.toLowerCase().includes(term))
+  const list = products.value
+  if (!term) return list
+  return list.filter((p) => p.nombre.toLowerCase().includes(term))
 })
 
 const router = useRouter()

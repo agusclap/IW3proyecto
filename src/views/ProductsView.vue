@@ -1,36 +1,47 @@
 <template>
-  <v-row>
-    <v-col cols="12" md="8">
-      <v-card>
-        <v-card-title class="text-h5">Productos disponibles</v-card-title>
-        <v-divider />
-        <v-card-text>
-          <ProductList @add-to-cart="onAdd" />
-        </v-card-text>
-      </v-card>
-    </v-col>
-    <v-col cols="12" md="4">
-      <CartMini
-        :items="items"
-        :total="total"
-        @inc="inc"
-        @dec="dec"
-        @remove="remove"
-      />
-    </v-col>
-  </v-row>
+  <v-container>
+    <div class="d-flex align-center justify-space-between mb-4">
+      <h2 class="mb-0">Productos</h2>
+      <v-btn color="secondary" variant="text" @click="goClients">
+        Ir a Clientes
+      </v-btn>
+    </div>
+
+    <ProductList @add-to-cart="handleAddToCart" />
+
+    <CartMini class="mt-6" />
+
+    <v-snackbar v-model="snack.show" :timeout="1800">
+      {{ snack.text }}
+    </v-snackbar>
+  </v-container>
 </template>
 
 <script setup>
-import ProductList from '../components/ProductList.vue'
-import CartMini from '../components/CartMini.vue'
-import { useCart } from '../composables/useCart'
-import { products } from '../data/products'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import ProductList from '@/components/ProductList.vue'
+import CartMini from '@/components/CartMini.vue'
+import { useCart } from '@/composables/useCart'
+import { findProduct } from '@/data/products'
 
-const { items, add, inc, dec, remove, total } = useCart()
+const router = useRouter()
+const { add } = useCart()
 
-function onAdd(id) {
-  const p = products.find((x) => x.id === id)
-  if (p) add(p)
+const snack = ref({ show: false, text: '' })
+
+function handleAddToCart(id) {
+  const p = findProduct(id)
+  if (!p) return
+  if (p.stock <= 0) {
+    snack.value = { show: true, text: 'Sin stock disponible' }
+    return
+  }
+  add(id) // esto descuenta stock y agrega al carrito
+  snack.value = { show: true, text: `Agregado: ${p.nombre}` }
+}
+
+function goClients() {
+  router.push({ name: 'clients' })
 }
 </script>

@@ -1,7 +1,9 @@
 <template>
   <v-app-bar color="primary" density="comfortable" class="text-white">
     <v-app-bar-title class="font-weight-bold">IW3 Shop</v-app-bar-title>
+
     <v-spacer />
+
     <div class="d-flex align-center gap-2">
       <v-btn
         v-for="link in links"
@@ -13,17 +15,28 @@
         {{ link.label }}
       </v-btn>
     </div>
+
     <v-spacer />
+
     <div class="d-flex align-center gap-3">
-      <v-chip v-if="loggedIn" color="white" text-color="primary" variant="elevated" prepend-icon="mdi-account">
+      <v-chip
+        v-if="loggedIn"
+        color="white"
+        text-color="primary"
+        variant="elevated"
+        prepend-icon="mdi-account"
+      >
         {{ userEmail }}
       </v-chip>
+
       <v-btn v-if="loggedIn" variant="outlined" color="white" @click="handleLogout">
         Salir
       </v-btn>
-      <v-btn v-else to="/login" variant="outlined" color="white">
-        Ingresar
-      </v-btn>
+
+      <template v-else>
+        <v-btn to="/login" variant="outlined" color="white">Ingresar</v-btn>
+        <v-btn to="/registro" variant="flat" color="white">Registrarse</v-btn>
+      </template>
     </div>
   </v-app-bar>
 </template>
@@ -31,7 +44,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useAuth } from '../composables/useAuth'
+import { useAuth } from '@/composables/useAuth'
 
 const route = useRoute()
 const router = useRouter()
