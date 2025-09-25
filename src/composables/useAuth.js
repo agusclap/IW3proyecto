@@ -2,8 +2,11 @@ import { ref, computed } from 'vue'
 
 const key = 'iw3_auth'
 const session = ref(null)
-const raw = localStorage.getItem(key)
-if (raw) session.value = JSON.parse(raw)
+
+if (typeof window !== 'undefined') {
+  const raw = window.localStorage.getItem(key)
+  if (raw) session.value = JSON.parse(raw)
+}
 
 export function useAuth() {
   const user = computed(() => session.value)
@@ -15,12 +18,16 @@ export function useAuth() {
       throw new Error('Credenciales inválidas')
     }
     session.value = { email }
-    localStorage.setItem(key, JSON.stringify(session.value))
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(key, JSON.stringify(session.value))
+    }
   }
 
   function logout() {
     session.value = null
-    localStorage.removeItem(key)
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem(key)
+    }
   }
 
   return { user, loggedIn, login, logout }
