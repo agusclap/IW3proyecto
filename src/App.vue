@@ -2,7 +2,7 @@
   <v-app>
     <AppToolBar />
     <v-main>
-      <v-container class="py-6">
+      <v-container fluid class="py-6">
         <RouterView />
       </v-container>
     </v-main>
