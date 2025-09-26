@@ -40,7 +40,7 @@ npm run dev
 
 Abrir en el navegador: http://localhost:5173
 
-
+```
 Rutas principales
 
 / → Inicio
